@@ -89,6 +89,7 @@ public class LockService extends Service
     @Override
     public void onDestroy() {
         Log.d(Const.TAG_SERVICE, "onDestroy()");
+        setLockState(false);
     }
 
     private void setLockState(boolean state) {
@@ -100,13 +101,13 @@ public class LockService extends Service
             mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, Const.TAG_SERVICE);
             mWakeLock.acquire();
             mLocked = true;
-            showToastUiThread(Const.TAG_MISC + ": Locking display on");
+            //showToastUiThread(Const.TAG_MISC + ": Locking display on");
         } else {
             Log.d(Const.TAG_SERVICE, "Unlocking display with power manager SCREEN_BRIGHT_WAKE_LOCK");
             mWakeLock.release();
             mWakeLock = null;
             mLocked = false;
-            showToastUiThread(Const.TAG_MISC + ": Release display to ambient");
+            //showToastUiThread(Const.TAG_MISC + ": Release display to ambient");
         }
     }
 
@@ -125,6 +126,8 @@ public class LockService extends Service
     }
 
     public void processDataItem(DataItem dataItem) {
+        setLockState(true);
+        /*
         DataMap dataMap = DataMapItem.fromDataItem(dataItem).getDataMap();
         String path = dataItem.getUri().getPath();
         if (path.equals(Const.LOCK_PATH)) {
@@ -135,6 +138,7 @@ public class LockService extends Service
         } else {
             Log.d(Const.TAG_SERVICE, "Ignoring data item update for path " + path);
         }
+        */
     }
 
     @Override
